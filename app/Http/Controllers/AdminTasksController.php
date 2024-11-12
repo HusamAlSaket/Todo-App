@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\User; // Add User model
 use Illuminate\Support\Facades\Hash; // Add for password hashing
+use Illuminate\Support\Facades\Auth;
 
 class AdminTasksController extends Controller
 {
@@ -92,11 +93,24 @@ public function createAdminUser(Request $request)
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'role' => 'admin', // Set the role to 'admin'
+        'role' => 'admin', // Make sure this is correctly set
     ]);
+    dd(Auth::user()); // Check the full user data
 
-    // Redirect back with a success message
-    return redirect()->route('admin.tasks.index')->with('success', 'Admin user created successfully');
+    // Log out the current user, then log in the new admin user
+    Auth::logout();
+    Auth::login($admin);
+session()->regenerate();
+
+if (Auth::check()) {
+    if (Auth::user()->role !== 'admin') {
+        return redirect('/')->with('error', 'Not an admin!');
+    }
+}
+
+
+    // Redirect to the admin tasks page or the intended page for admin users
+    return redirect()->route('admin.tasks.index')->with('success', 'Admin user created and logged in successfully');
 }
 public function showCreateAdminForm()
 {
