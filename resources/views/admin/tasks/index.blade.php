@@ -3,6 +3,11 @@
 @section('content')
     <h1>Admin Task List</h1>
 
+    <!-- Show Create Task button only for admins -->
+    @if(auth()->user()->role == 'admin')  <!-- or use isAdmin() if you've defined it -->
+        <a href="{{ route('admin.tasks.create') }}" class="btn btn-primary mb-3">Create Task</a>
+    @endif
+
     @foreach($tasks as $task)
         <div class="card mb-2 {{ $task->isCompleted() ? 'border-success' : '' }}">
             <div class="card-body">
@@ -14,11 +19,9 @@
                 </p>
 
                 <!-- Button to Open Edit Modal -->
-            
-                <a href="{{ route('admin.tasks.edit', $task->id) }}" class="btn btn-outline-primary btn-md-3 w-10 " style="border-radius: 5px; padding: 7px 20px;">
-    <i class="bi bi-pencil-square"></i> Edit Task
-</a>
-
+                <a href="{{ route('admin.tasks.edit', $task->id) }}" class="btn btn-outline-primary btn-md-3 w-10" style="border-radius: 5px; padding: 7px 20px;">
+                    <i class="bi bi-pencil-square"></i> Edit Task
+                </a>
 
                 <!-- Single Form for Completing / Reverting the Task -->
                 <form action="{{ route('admin.tasks.update', $task->id) }}" method="POST" style="display: inline-block;">

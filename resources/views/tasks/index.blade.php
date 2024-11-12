@@ -1,7 +1,7 @@
 @extends ('layouts.app')
 
 @section('content')
-<h1>Task List</h1>
+<h1>Your Task List</h1>
 
 @foreach($tasks as $task)
     <div class="card mb-2 {{ $task->isCompleted() ? 'border-success' : '' }}">
@@ -13,7 +13,7 @@
                 {{ $task->description }}
             </p>
 
-            <form action="/tasks/{{$task->id}}" method="POST">
+            <form action="{{ route('tasks.update', $task->id) }}" method="POST">
                 @method('PATCH')
                 @csrf
                 @if(!$task->isCompleted()) 
@@ -25,5 +25,6 @@
         </div>
     </div>
 @endforeach
-<a href="/tasks/create" class="btn btn-primary btn-lg w-100">New Task</a>
+
+<a href="{{ route('tasks.create') }}" class="btn btn-primary btn-lg w-100">New Task</a>
 @endsection

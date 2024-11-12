@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,4 +40,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Define the relationship between a user and their tasks.
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+    // App\Models\User.php
+
+public function isAdmin()
+{
+    return $this->role === 'admin';
+}
+
 }
