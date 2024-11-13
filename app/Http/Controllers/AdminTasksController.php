@@ -95,7 +95,7 @@ public function createAdminUser(Request $request)
         'password' => Hash::make($request->password),
         'role' => 'admin', // Make sure this is correctly set
     ]);
-    dd(Auth::user()); // Check the full user data
+    dd($admin); // Check the full user data
 
     // Log out the current user, then log in the new admin user
     Auth::logout();
